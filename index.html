@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OSINTMichelin — Fine Dining Reservations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!--
+  OSINTMichelin lab build notes (sengaja ditinggal di source untuk latihan recon):
+  - auth full client-side, lihat AUTH object di script.js
+  - admin panel ada di #admin
+  - order lookup tidak ada ownership check
+-->
+</head>
+<body>
+
+<header class="top">
+  <div class="topbar">
+    <div class="brand"><h1>OSINTMichelin</h1><span>reservations &amp; table service</span></div>
+    <div class="userbox" id="userbox"></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- LOGIN VIEW -->
+  <div id="view-login">
+    <div class="hero">
+      <h2>A table is waiting.</h2>
+      <p>Sign in to browse tonight's menu and send an order straight to the pass.</p>
+    </div>
+    <div class="card" style="max-width:360px;">
+      <h3 style="font-size:1rem;">Sign in</h3>
+      <div class="field"><label for="li-u">Username</label><input id="li-u" autocomplete="username"></div>
+      <div class="field"><label for="li-p">Password</label><input id="li-p" type="password" autocomplete="current-password"></div>
+      <button class="cta" onclick="doLogin()">Sign in</button>
+      <div class="err" id="li-err"></div>
+    </div>
+  </div>
+
+  <!-- APP VIEW -->
+  <div id="view-app" class="hide">
+    <div class="hero">
+      <h2>Tonight's menu</h2>
+      <p>Select dishes, set your table number, and send the order through.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="active" data-tab="menu" onclick="showTab('menu')">Menu &amp; order</button>
+      <button data-tab="track" onclick="showTab('track')">Track an order</button>
+    </div>
+
+    <div id="tab-menu">
+      <div class="menu-grid" id="menu-grid"></div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;">Your order</h3>
+        <div id="cart-lines"></div>
+        <div class="total"><span>Total</span><span id="cart-total">Rp 0</span></div>
+        <div class="field" style="margin-top:16px;"><label for="tbl">Table number</label>
+          <input id="tbl" placeholder="e.g. 12">
+        </div>
+        <div class="field"><label for="notes">Notes for the kitchen (optional)</label>
+          <textarea id="notes" rows="2" placeholder="allergies, special requests..."></textarea>
+        </div>
+        <button class="cta" onclick="placeOrder()">Send order</button>
+        <div class="err" id="order-err"></div>
+      </div>
+    </div>
+
+    <div id="tab-track" class="hide">
+      <div class="card" style="max-width:420px;">
+        <h3 style="font-size:1rem;">Look up an order</h3>
+        <div class="field"><label for="trk-id">Order ID</label><input id="trk-id" placeholder="e.g. 1001"></div>
+        <button class="ghost" onclick="trackOrder()">Look up</button>
+        <div id="trk-result"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN VIEW -->
+  <div id="view-admin" class="hide">
+    <div class="hero">
+      <h2>Back of house</h2>
+      <p>Staff-only order queue and guest log.</p>
+    </div>
+    <div id="admin-login-box" class="card" style="max-width:360px;">
+      <h3 style="font-size:1rem;">Staff sign in</h3>
+      <div class="field"><label for="ad-u">Username</label><input id="ad-u"></div>
+      <div class="field"><label for="ad-p">Password</label><input id="ad-p" type="password"></div>
+      <button class="cta" onclick="doAdminLogin()">Sign in</button>
+      <div class="err" id="ad-err"></div>
+    </div>
+    <div id="admin-panel" class="hide">
+      <h3 style="margin-top:24px; font-size:1.1rem;">All orders</h3>
+      <div id="admin-orders"></div>
+      <h3 style="margin-top:30px; font-size:1.1rem;">Registered guests</h3>
+      <div id="admin-users"></div>
+    </div>
+  </div>
+
+  <footer>OSINTMichelin lab build · for authorized security testing only · <span id="route-hint" style="opacity:.4">#admin</span></footer>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
